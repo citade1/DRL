@@ -132,7 +132,12 @@ def run_training_loop(params):
             # TODO: collect `params['batch_size']` transitions
             # HINT: use utils.sample_trajectories
             # TODO: implement missing parts of utils.sample_trajectory
-            paths, envsteps_this_batch = TODO
+            paths, envsteps_this_batch = utils.sample_trajectories(
+                env=env, 
+                policy=actor, 
+                min_timesteps_per_batch=params['batch_size'], 
+                max_path_length=params['ep_len']
+            )
 
             # relabel the collected obs with actions from a provided expert policy
             if params['do_dagger']:
@@ -141,7 +146,11 @@ def run_training_loop(params):
                 # TODO: relabel collected obsevations (from our policy) with labels from expert policy
                 # HINT: query the policy (using the get_action function) with paths[i]["observation"]
                 # and replace paths[i]["action"] with these expert labels
-                paths = TODO
+                for i, path in enumerate(paths):
+                    obs_np = path["observation"]
+                    expert_acs = expert_policy.get_action(obs_np)
+                    paths[i]["action"] = expert_acs
+            
 
         total_envsteps += envsteps_this_batch
         # add collected data to replay buffer
@@ -157,7 +166,8 @@ def run_training_loop(params):
           # HINT2: use np.random.permutation to sample random indices
           # HINT3: return corresponding data points from each array (i.e., not different indices from each array)
           # for imitation learning, we only need observations and actions.  
-          ob_batch, ac_batch = TODO
+          inds = np.random.permutation(len(replay_buffer.obs))[:params['train_batch_size']]
+          ob_batch, ac_batch = replay_buffer.obs[inds], replay_buffer.acs[inds] 
 
           # use the sampled data to train an agent
           train_log = actor.update(ob_batch, ac_batch)

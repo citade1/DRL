@@ -1,0 +1,26 @@
+# Core scientific stack
+numpy==2.0.2
+scipy           
+pandas
+matplotlib      
+
+# PyTorch stack 
+torch==2.5.1
+torchvision==0.20.1
+torchaudio==2.5.1
+
+# RL environments
+gym==0.25.2
+mujoco==2.3.0
+box2d==2.3.10
+
+# Visualization / logging
+tensorboard==2.10.0
+tensorboardX==2.5.1
+moviepy==1.0.3
+pyvirtualdisplay==3.0
+opencv-python==4.12.0.88
+
+# Interactive / debugging
+ipython
+ipdb==0.13.9

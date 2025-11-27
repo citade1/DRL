@@ -1,6 +1,7 @@
 import os
 from tensorboardX import SummaryWriter
 import numpy as np
+import matplotlib.pyplot as plt
 
 class Logger:
     def __init__(self, log_dir, n_logged_samples=10, summary_writer=None):
@@ -59,7 +60,7 @@ class Logger:
 
     def log_graph(self, array, name, step, phase):
         """figure: matplotlib.pyplot figure handle"""
-        im = plot_graph(array)
+        im = plt.plot_graph(array)
         self._summ_writer.add_image('{}_{}'.format(name, phase), im, step)
 
     def dump_scalars(self, log_path=None):
