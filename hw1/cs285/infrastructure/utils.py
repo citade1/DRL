@@ -18,7 +18,11 @@ def sample_trajectory(env, policy, max_path_length, render=False):
     """Sample a rollout in the environment from a policy."""
     
     # initialize env for the beginning of a new rollout
-    ob, _ = env.reset() # TODO: initial observation after resetting the env
+    reset_out = env.reset() # TODO: initial observation after resetting the env
+    if isinstance(reset_out, tuple):
+        ob = reset_out[0]
+    else:
+        ob = reset_out
     ob = np.array(ob, dtype=np.float32) # (ob_dim, )
     ob_torch = ptu.from_numpy(ob).unsqueeze(0) # (1, ob_dim)
 
@@ -41,7 +45,7 @@ def sample_trajectory(env, policy, max_path_length, render=False):
         ac = ac[0] # (ac_dim,)
 
         # TODO: take that action and get reward and next ob
-        next_ob, rew, done, _,  _ = env.step(ac)
+        next_ob, rew, done, _ = env.step(ac)
         
         # TODO rollout can end due to done, or due to max_path_length
         steps += 1
